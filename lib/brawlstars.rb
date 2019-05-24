@@ -2,7 +2,38 @@ require "httparty"
 require "brawlstars/tag"
 
 module Brawlstars
-  class Error < StandardError; end
+  class Error
+    class Unauthorized < StandardError
+      def message
+        'The API token given was invalid or blocked.'
+      end
+    end
+    class TagError < StandardError
+      def message
+        'The tag given was invalid.'
+      end
+    end
+    class NotFoundError < StandardError
+      def message
+        'The tag given was not found.'
+      end
+    end
+    class RateLimitError < StandardError
+      def message
+        'The rate limit has been hit.'
+      end
+    end
+    class MaintainanceError < StandardError
+      def message
+        'There is a maintainance break. Try again later.'
+      end
+    end
+    class ServerError < StandardError
+      def message
+        'The API is down. Try again later.'
+      end
+    end
+  end
   class Client
     def initialize(token: false)
       raise "No authorization token was given!" if !token
@@ -24,8 +55,16 @@ module Brawlstars
       case res.code
         when 200
           res
-        when 400...600
-          raise "Error on request; Status code: #{res.code}; Message: #{res["message"]}"
+        when 401
+          raise Error::Unauthorized
+        when 404
+          raise Error::NotFoundError
+        when 429
+          raise Error::RateLimitError
+        when 503
+          raise Error::MaintainanceError
+        when 500...600
+          raise Error::ServerError
       end
     end
     
