@@ -20,6 +20,12 @@ Gem::Specification.new do |spec|
   spec.require_paths = ["lib"]
   spec.required_ruby_version = '>= 2.0.0'
   spec.post_install_message = "Brawlstarsrb is my name, GETting is my game!"
+  s.metadata = {
+    "bug_tracker_uri"   => "https://github.com/Karthik99999/brawlstarsrb/issues",
+    "changelog_uri"     => "https://github.com/Karthik99999/brawlstarsrb/CHANGELOG.md",
+    "documentation_uri" => "https://www.rubydoc.info/github/Karthik99999/brawlstarsrb",
+    "source_code_uri"   => "https://github.com/Karthik99999/brawlstarsrb"
+  }
   
   spec.add_dependency "httparty", "~> 0.17.0"
 
