@@ -37,38 +37,7 @@ module Brawlstars
   class Client
     def initialize(token: false)
       raise "No authorization token was given!" if !token
-      @@token = token
-    end
-    class << self
-      private
-      
-      # The method to send GET requests to the API
-      #
-      # @param ep [String] the endpoint to get.
-      # @return [Hash] the response returned by the endpoint.
-      
-      def self.get(ep)
-        url = "https://api.brawlapi.cf/v1#{ep}"
-        begin
-          res = HTTParty.get(url, {headers: {"Authorization" => @@token}})
-        rescue HTTParty::Error => e
-          puts e
-        end
-        case res.code
-          when 200
-            res
-          when 401
-            raise Error::Unauthorized
-          when 404
-            raise Error::NotFoundError
-          when 429
-            raise Error::RateLimitError
-          when 503
-            raise Error::MaintainanceError
-          when 500...600
-            raise Error::ServerError
-        end
-      end
+      @token = token
     end
     
     # Get info about the API
@@ -76,7 +45,7 @@ module Brawlstars
     # @return [Hash] info about the API
 
     def about
-      Client.get("/about")
+      get("/about")
     end
     
     # Get a player by their tag
@@ -86,7 +55,7 @@ module Brawlstars
 
     def getPlayer(tag)
       tag = validateTag(tag)
-      Client.get("/player?tag=#{tag}")
+      get("/player?tag=#{tag}")
     end
     
     # Search for players by their name
@@ -95,7 +64,7 @@ module Brawlstars
     # @return [Hash] players returned by the search.
     
     def playerSearch(name)
-      Client.get("/player/search?name=#{name.gsub(' ', '%20')}")
+      get("/player/search?name=#{name.gsub(' ', '%20')}")
     end
     
     # Get a club by its tag
@@ -105,7 +74,7 @@ module Brawlstars
     
     def getClub(tag)
       tag = validateTag(tag)
-      Client.get("/club?tag=#{tag}")
+      get("/club?tag=#{tag}")
     end
     
     # Search for clubs by their name
@@ -114,7 +83,7 @@ module Brawlstars
     # @return [Hash] clubs returned by the search.
     
     def clubSearch(name)
-      Client.get("/club/search?name=#{name.gsub(' ', '%20')}")
+      get("/club/search?name=#{name.gsub(' ', '%20')}")
     end
     
     # Get upcoming events
@@ -122,7 +91,7 @@ module Brawlstars
     # @return [Hash] upcoming events
     
     def getUpcomingEvents
-      Client.get("/events?type=upcoming")
+      get("/events?type=upcoming")
     end
     
     # Get current events
@@ -130,7 +99,7 @@ module Brawlstars
     # @return [Hash] current events
     
     def getCurrentEvents
-      Client.get("/events?type=current")
+      get("/events?type=current")
     end
     
     # Get miscellaneous data, like shop/season reset
@@ -138,7 +107,7 @@ module Brawlstars
     # @return [Hash] miscellaneous data
     
     def getMisc
-      Client.get("/misc")
+      get("/misc")
     end
     
     # Get top global clubs
@@ -149,7 +118,7 @@ module Brawlstars
     def getTopClubs(count=200)
       raise 'Count must be a number.' if !count.is_a? Integer
       raise 'Count must be between 1 and 200.' if !count.between?(1,200)
-      Client.get("/leaderboards/clubs?count=#{count}")
+      get("/leaderboards/clubs?count=#{count}")
     end
     
     # Get top global players
@@ -161,7 +130,37 @@ module Brawlstars
     def getTopPlayers(count=200, brawler="")
       raise 'Count must be a number.' if !count.is_a? Integer
       raise 'Count must be between 1 and 200.' if !count.between?(1,200)
-      Client.get("/leaderboards/players?count=#{count}&brawler=#{brawler}")
+      get("/leaderboards/players?count=#{count}&brawler=#{brawler}")
+    end
+    
+    protected
+    
+    # The method to send GET requests to the API
+    #
+    # @param ep [String] the endpoint to get.
+    # @return [Hash] the response returned by the endpoint.
+      
+    def get(ep)
+      url = "https://api.brawlapi.cf/v1#{ep}"
+      begin
+        res = HTTParty.get(url, {headers: {"Authorization" => @token}})
+      rescue HTTParty::Error => e
+        puts e
+      end
+      case res.code
+        when 200
+          res
+        when 401
+          raise Error::Unauthorized
+        when 404
+          raise Error::NotFoundError
+        when 429
+          raise Error::RateLimitError
+        when 503
+          raise Error::MaintainanceError
+        when 500...600
+          raise Error::ServerError
+      end
     end
   end
 end
