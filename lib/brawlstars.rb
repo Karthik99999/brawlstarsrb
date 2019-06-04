@@ -39,32 +39,35 @@ module Brawlstars
       raise "No authorization token was given!" if !token
       @@token = token
     end
-    
-    # The method to send GET requests to the API
-    #
-    # @param ep [String] the endpoint to get.
-    # @return [Hash] the response returned by the endpoint.
-    
-    def self.get(ep)
-      url = "https://api.brawlapi.cf/v1#{ep}"
-      begin
-        res = HTTParty.get(url, {headers: {"Authorization" => @@token}})
-      rescue HTTParty::Error => e
-        puts e
-      end
-      case res.code
-        when 200
-          res
-        when 401
-          raise Error::Unauthorized
-        when 404
-          raise Error::NotFoundError
-        when 429
-          raise Error::RateLimitError
-        when 503
-          raise Error::MaintainanceError
-        when 500...600
-          raise Error::ServerError
+    class << self
+      private
+      
+      # The method to send GET requests to the API
+      #
+      # @param ep [String] the endpoint to get.
+      # @return [Hash] the response returned by the endpoint.
+      
+      def self.get(ep)
+        url = "https://api.brawlapi.cf/v1#{ep}"
+        begin
+          res = HTTParty.get(url, {headers: {"Authorization" => @@token}})
+        rescue HTTParty::Error => e
+          puts e
+        end
+        case res.code
+          when 200
+            res
+          when 401
+            raise Error::Unauthorized
+          when 404
+            raise Error::NotFoundError
+          when 429
+            raise Error::RateLimitError
+          when 503
+            raise Error::MaintainanceError
+          when 500...600
+            raise Error::ServerError
+        end
       end
     end
     
