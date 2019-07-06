@@ -1,5 +1,6 @@
 require "httparty"
 require "brawlstars/tag"
+require "brawlstars/region"
 
 module Brawlstars
   class Error
@@ -11,6 +12,11 @@ module Brawlstars
     class TagError < StandardError
       def message
         'The tag given was invalid.'
+      end
+    end
+    class RegionError < StandardError
+      def message
+        'The region must be a valid 2 character country code.'
       end
     end
     class NotFoundError < StandardError
@@ -67,6 +73,16 @@ module Brawlstars
       get("/player/search?name=#{name.gsub(' ', '%20')}")
     end
     
+    # Get a player's battle log by their tag
+    #
+    # @param tag [String] tag of the player to get.
+    # @return [Hash] data of the player's battle log that was searched.
+    
+    def getBattleLog(tag)
+      tag = validateTag(tag)
+      get("/player/battlelog?tag=#{tag}")
+    end
+    
     # Get a club by its tag
     #
     # @param tag [String] tag of the club to get.
@@ -113,24 +129,28 @@ module Brawlstars
     # Get top global clubs
     #
     # @param count [Integer] number of clubs to return.
+    # @param region [String] 2 character country code for the region of leaderboard to return.
     # @return [Hash] clubs in order from 1st rank down.
     
-    def getTopClubs(count=200)
+    def getTopClubs(count=200, region="global")
       raise 'Count must be a number.' if !count.is_a? Integer
       raise 'Count must be between 1 and 200.' if !count.between?(1,200)
-      get("/leaderboards/clubs?count=#{count}")
+      validateRegion(region)
+      get("/leaderboards/clubs?count=#{count}&region=#{region}")
     end
     
     # Get top global players
     #
     # @param count [Integer] number of players to return.
     # @param brawler [String] brawler leaderboard to return.
+    # @param region [String] 2 character country code for the region of leaderboard to return.
     # @return [Hash] players in order from 1st rank down.
     
-    def getTopPlayers(count=200, brawler="")
+    def getTopPlayers(count=200, brawler="", region="global")
       raise 'Count must be a number.' if !count.is_a? Integer
       raise 'Count must be between 1 and 200.' if !count.between?(1,200)
-      get("/leaderboards/players?count=#{count}&brawler=#{brawler}")
+      validateRegion(region)
+      get("/leaderboards/players?count=#{count}&brawler=#{brawler}&region=#{region}")
     end
     
     protected
