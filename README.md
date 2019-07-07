@@ -1,4 +1,7 @@
 # brawlstarsrb
+[![Gem Version](https://img.shields.io/gem/v/brawlstars.svg?color=red&label=brawlstars&logo=rubygems&style=flat-square)](https://rubygems.org/gems/brawlstars)
+[![License](https://img.shields.io/github/license/Karthik99999/brawlstarsrb.svg?style=flat-square)](../master/LICENSE)
+[![Discord Server Invite](https://img.shields.io/badge/discord-join-7289DA.svg?logo=discord&longCache=true&style=flat-square)](https://discord.me/brawlapi)
 
 brawlstarsrb is a Ruby implementation of [BrawlAPI](https://docs.brawlapi.cf), the unofficial Brawl Stars API.
 
