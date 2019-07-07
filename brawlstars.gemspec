@@ -22,7 +22,7 @@ Gem::Specification.new do |spec|
   spec.post_install_message = "Brawlstarsrb is my name, GETting is my game!"
   spec.metadata = {
     "bug_tracker_uri"   => "https://github.com/Karthik99999/brawlstarsrb/issues",
-    "changelog_uri"     => "https://github.com/Karthik99999/brawlstarsrb/CHANGELOG.md",
+    "changelog_uri"     => "https://github.com/Karthik99999/brawlstarsrb/blob/master/CHANGELOG.md",
     "documentation_uri" => "https://www.rubydoc.info/github/Karthik99999/brawlstarsrb",
     "source_code_uri"   => "https://github.com/Karthik99999/brawlstarsrb"
   }
