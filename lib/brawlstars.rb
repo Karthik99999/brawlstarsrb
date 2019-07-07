@@ -1,6 +1,5 @@
 require "httparty"
-require "brawlstars/tag"
-require "brawlstars/region"
+require "brawlstars/validation"
 
 module Brawlstars
   class Error
