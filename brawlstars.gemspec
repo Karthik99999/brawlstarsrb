@@ -19,7 +19,7 @@ Gem::Specification.new do |spec|
   spec.executables   = spec.files.grep(%r{^exe/}) { |f| File.basename(f) }
   spec.require_paths = ["lib"]
   spec.required_ruby_version = '>= 2.0.0'
-  spec.post_install_message = "Brawlstarsrb is my name, GETting is my game!"
+  spec.post_install_message = "Brawlstarsrb is my name, making API requests is my game!"
   spec.metadata = {
     "bug_tracker_uri"   => "https://github.com/Karthik99999/brawlstarsrb/issues",
     "changelog_uri"     => "https://github.com/Karthik99999/brawlstarsrb/blob/master/CHANGELOG.md",
