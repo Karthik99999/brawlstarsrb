@@ -56,11 +56,11 @@ module Brawlstars
     # Get a player by their tag
     #
     # @param tag [String] tag of the player to get.
-    # @return [Hash] data of the player that was searched.
+    # @return [Brawlstars::Player] data of the player that was searched.
 
     def getPlayer(tag)
       tag = validateTag(tag)
-      get("/player?tag=#{tag}")
+      Player.new(self, get("/player?tag=#{tag}"))
     end
     
     # Search for players by their name
@@ -168,7 +168,7 @@ module Brawlstars
       end
       case res.code
         when 200
-          res
+          res.parsed_response
         when 401
           raise Error::Unauthorized
         when 404
@@ -180,6 +180,36 @@ module Brawlstars
         when 500...600
           raise Error::ServerError
       end
+    end
+  end
+  class Player
+    def initialize(client, data)
+      @client = client
+      @data = data
+    end
+    
+    def method_missing(name, *args, &block)
+      if @data.respond_to?(name)
+        @data.send(name, *args, &block)
+      else
+        super
+      end
+    end
+    
+    def getClub
+      if !@data["club"]
+        nil
+      else
+        @client.getClub(@data["club"]["tag"])
+      end
+    end
+    
+    def getBattleLog
+      @client.getBattleLog(@data["tag"])
+    end
+    
+    def to_s
+      "#{@data}"
     end
   end
 end

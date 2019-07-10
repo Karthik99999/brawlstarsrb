@@ -10,6 +10,6 @@ end
 
 def validateTag(tag)
   tag = cleanTag(tag)
-  raise Brawlstars::Error::TagError if !tag.match(/^[0289CGJLPQRUVY]+$/)
+  raise Brawlstars::Error::TagError if (!tag.match(/^[0289CGJLPQRUVY]+$/) or tag.length < 3)
   tag
 end
