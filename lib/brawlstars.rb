@@ -160,7 +160,7 @@ module Brawlstars
     # @return [Hash] the response returned by the endpoint.
       
     def get(ep)
-      url = "https://api.brawlapi.cf/v1#{ep}"
+      url = "https://api.starlist.pro/v1#{ep}"
       begin
         res = HTTParty.get(url, {headers: {"Authorization" => @token}})
       rescue HTTParty::Error => e
