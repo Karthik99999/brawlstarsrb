@@ -17,7 +17,7 @@
 - Actual region code checking
 
 ### Changed
-- Moved validation functions to one file ([validation.rb](../master/lib/brawlstars/tag.rb))
+- Moved validation functions to one file ([validation.rb](../master/lib/brawlstars/validation.rb))
 - Fixed changelog link in gemspec
 
 ### Removed
